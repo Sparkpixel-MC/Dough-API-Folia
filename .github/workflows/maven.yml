@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout Repository
       uses: actions/checkout@v3.5.3
 
     - name: Set up JDK 21
@@ -29,14 +29,14 @@ jobs:
         java-package: jdk
         architecture: x64
 
-    - name: Cache Maven packages
+    - name: Cache Maven Packages
       uses: actions/cache@v3
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
 
-    - name: Build with Maven
+    - name: Build With Maven
       run: mvn -s settings.xml clean package --file pom.xml
       env:
           GITHUB_ACTOR: ${{ github.actor }}
@@ -46,6 +46,10 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
           name: Artifacts
-          path: dough-api/target/*-Folia.jar|
-                !dough-api/target/original-*.jar
+          path: dough-api/target/*-Folia.jar
+
+    - name: Publish package
+      run: mvn --batch-mode -pl dough-api -am deploy
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
