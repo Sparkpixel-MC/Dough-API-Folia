@@ -39,8 +39,10 @@ jobs:
     - name: Build with Maven
       run: mvn package --file pom.xml
 
-    - name: Publish dough
-      if: github.event_name != 'pull_request'
-      run: mvn -s .mvn/settings.xml -B deploy --file pom.xml --errors
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+    - name: Capture Release Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+          name: Artifacts
+          path: dough-api/target/*-Folia.jar|
+                !dough-api/target/original-*.jar
+          

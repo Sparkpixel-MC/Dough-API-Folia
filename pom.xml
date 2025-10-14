@@ -251,11 +251,13 @@
         </repository>
     </repositories>
     
-    <server>
-      <id>github</id>
-      <username>GITHUB_ACTOR</username>
-      <password>GITHUB_TOKEN</password>
-    </server>
+    <servers>
+      <server>
+        <id>github</id>
+        <username>GITHUB_ACTOR</username>
+        <password>GITHUB_TOKEN</password>
+      </server>
+    </servers>
 
     <dependencies>
         <dependency>
