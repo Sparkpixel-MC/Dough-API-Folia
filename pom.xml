@@ -38,16 +38,10 @@
 
     <distributionManagement>
         <repository>
-            <id>gugu-maven-repo</id>
-            <name>Gugu Maven Release Repository</name>
-            <url>https://maven.norain.city/releases</url>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Sparkpixel-MC/Dough-API-Folia</url>
         </repository>
-
-        <snapshotRepository>
-            <id>gugu-maven-repo</id>
-            <name>Gugu Maven Snapshot Repository</name>
-            <url>https://maven.norain.city/snapshots</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <licenses>
