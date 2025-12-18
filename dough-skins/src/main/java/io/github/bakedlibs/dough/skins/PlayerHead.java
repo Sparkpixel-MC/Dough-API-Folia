@@ -79,8 +79,10 @@ public final class PlayerHead {
         }
 
         try {
-            GameProfile profile = skin.getProfile();
-            adapter.setGameProfile(block, profile, sendBlockUpdate);
+            GameProfile profile = skin.getProfile().getGameProfile();
+            if (profile != null) {
+                adapter.setGameProfile(block, profile, sendBlockUpdate);
+            }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
