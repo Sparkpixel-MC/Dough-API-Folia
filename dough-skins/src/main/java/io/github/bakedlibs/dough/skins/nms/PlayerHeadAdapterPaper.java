@@ -32,9 +32,9 @@ public class PlayerHeadAdapterPaper implements PlayerHeadAdapter {
 
         Skull skull = (Skull) state;
 
-        Property property = profile.getProperties().get("textures").iterator().next();
+        Property property = profile.properties().get("textures").iterator().next();
 
-        PlayerProfile paperPlayerProfile = Bukkit.createProfile(profile.getId(), profile.getName());
+        PlayerProfile paperPlayerProfile = Bukkit.createProfile(profile.id(), profile.name());
 
         // Old authlib check
         if (getName != null && getValue != null && getSignature != null) {
