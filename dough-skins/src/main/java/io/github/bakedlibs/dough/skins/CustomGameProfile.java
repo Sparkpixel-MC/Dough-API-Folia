@@ -49,7 +49,7 @@ public class CustomGameProfile {
     private void createGameProfile() {
         if (this.gameProfile == null) {
             this.gameProfile = new GameProfile(this.uuid, PLAYER_NAME);
-            this.gameProfile.getProperties().put(PROPERTY_KEY, new Property(PROPERTY_KEY, texture));
+            this.gameProfile.properties().put(PROPERTY_KEY, new Property(PROPERTY_KEY, texture));
         }
     }
 
