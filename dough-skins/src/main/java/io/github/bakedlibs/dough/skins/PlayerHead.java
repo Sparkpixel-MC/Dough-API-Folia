@@ -1,60 +1,30 @@
 package io.github.bakedlibs.dough.skins;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.block.Skull;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import com.mojang.authlib.GameProfile;
-
-import io.github.bakedlibs.dough.skins.nms.PlayerHeadAdapter;
-import io.github.bakedlibs.dough.versions.UnknownServerVersionException;
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import org.apache.commons.lang.Validate;
+import java.util.function.Consumer;
 
 public final class PlayerHead {
 
-    private static final PlayerHeadAdapter adapter = PlayerHeadAdapter.get();
-
     private PlayerHead() {}
 
-    /**
-     * This Method will simply return the Head of the specified Player
-     * 
-     * @param player
-     *            The Owner of your Head
-     * 
-     * @return A new Head Item for the specified Player
-     */
     public static @Nonnull ItemStack getItemStack(@Nonnull OfflinePlayer player) {
         Validate.notNull(player, "The player can not be null!");
-
         return getItemStack(meta -> meta.setOwningPlayer(player));
     }
 
-    /**
-     * This Method will simply return the Head of the specified Player
-     * 
-     * @param skin
-     *            The skin of the head you want.
-     * 
-     * @return A new Head Item for the specified Player
-     */
     public static @Nonnull ItemStack getItemStack(@Nonnull PlayerSkin skin) {
         Validate.notNull(skin, "The skin can not be null!");
-
         return getItemStack(meta -> {
-            try {
-                skin.getProfile().apply(meta);
-            } catch (NoSuchFieldException | IllegalAccessException | UnknownServerVersionException e) {
-                e.printStackTrace();
-            }
+            skin.getProfile().apply(meta);
         });
     }
 
@@ -68,24 +38,19 @@ public final class PlayerHead {
 
     @ParametersAreNonnullByDefault
     public static void setSkin(Block block, PlayerSkin skin, boolean sendBlockUpdate) {
-        if (adapter == null) {
-            throw new UnsupportedOperationException("Cannot update skin texture, no adapter found");
-        }
+        Validate.notNull(block, "Block cannot be null");
+        Validate.notNull(skin, "Skin cannot be null");
 
         Material material = block.getType();
-
         if (material != Material.PLAYER_HEAD && material != Material.PLAYER_WALL_HEAD) {
             throw new IllegalArgumentException("Cannot update a head texture. Expected a Player Head, received: " + material);
         }
 
-        try {
-            GameProfile profile = skin.getProfile().getGameProfile();
-            if (profile != null) {
-                adapter.setGameProfile(block, profile, sendBlockUpdate);
-            }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
+        if (!(block.getState() instanceof Skull skullBlock)) {
+            System.err.println("Could not update the skin of a player head. The block state is not a skull.");
+            return;
         }
+        skullBlock.setOwnerProfile(skin.getProfile().getPlayerProfile());
+        skullBlock.update(true, sendBlockUpdate);
     }
-
 }
