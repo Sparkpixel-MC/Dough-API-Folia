@@ -15,14 +15,11 @@ import com.mojang.authlib.properties.Property;
 import io.github.bakedlibs.dough.reflection.ReflectionUtils;
 import io.github.bakedlibs.dough.versions.MinecraftVersion;
 import io.github.bakedlibs.dough.versions.UnknownServerVersionException;
-import org.bukkit.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
 
 public class CustomGameProfile {
-    /**
-     * The player name for this profile.
-     * "CS-CoreLib" for historical reasons and backwards compatibility.
-     */
+
     private static final String PLAYER_NAME = "CS-CoreLib";
 
     /**
@@ -39,8 +36,6 @@ public class CustomGameProfile {
         this.uuid = uuid;
         this.skinUrl = url;
         this.texture = texture;
-
-        // 延迟创建 GameProfile，只在需要时创建
         if (texture != null) {
             createGameProfile();
         }
@@ -56,13 +51,12 @@ public class CustomGameProfile {
     void apply(@Nonnull SkullMeta meta) throws NoSuchFieldException, IllegalAccessException, UnknownServerVersionException {
         // setOwnerProfile was added in 1.18, but getOwningPlayer throws a NullPointerException since 1.20.2
         if (MinecraftVersion.get().isAtLeast(MinecraftVersion.parse("1.20"))) {
-            PlayerProfile playerProfile = Bukkit.createPlayerProfile(this.uuid, PLAYER_NAME);
+            PlayerProfile playerProfile = Bukkit.createProfile(this.uuid, PLAYER_NAME);
             PlayerTextures playerTextures = playerProfile.getTextures();
             playerTextures.setSkin(this.skinUrl);
             playerProfile.setTextures(playerTextures);
             meta.setOwnerProfile(playerProfile);
         } else {
-            // 确保 GameProfile 已创建
             if (this.gameProfile == null) {
                 createGameProfile();
             }

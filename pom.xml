@@ -28,7 +28,7 @@
 
         <!-- Update dough here and all modules will have this version -->
         <!-- No need to update all of them -->
-        <revision>2.2.0-SNAPSHOT</revision>
+        <revision>2.3.0-SNAPSHOT</revision>
     </properties>
 
     <issueManagement>
